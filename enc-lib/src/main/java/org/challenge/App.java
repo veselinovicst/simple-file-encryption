@@ -23,9 +23,9 @@ public class App {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        File inputFile = new File(App.class.getResource("/test.txt").getFile());
-        File outputFile = new File("enc-test.txt");
-        File decryptedOutputFile = new File("dec-test.txt");
+        File inputFile = new File(App.class.getResource("/testfile.pdf").getFile());
+        File outputFile = new File("enc-test.pdf");
+        File decryptedOutputFile = new File("dec-test.pdf");
 
         SecretKeySpec secretKeySpec = KeyFactory.generateAESKey();
 

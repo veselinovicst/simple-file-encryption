@@ -51,8 +51,9 @@ public class FileEncryptionService {
         byte[] fileBytes = FileUtils.readFileToByteArray(input);
         byte[] iv = Arrays.copyOfRange(fileBytes, 0, 16);
         Cipher cipher = generateCipher(Cipher.DECRYPT_MODE, iv, secretKeySpec);
-        byte[] decryptedFileBytes = cipher.doFinal(fileBytes, 16, fileBytes.length - 16);
+        byte[] decryptedFileBytes = cipher.doFinal(fileBytes, KeyFactory.IV_SIZE, fileBytes.length - KeyFactory.IV_SIZE);
         FileUtils.writeByteArrayToFile(output, decryptedFileBytes);
+
     }
 
 }
