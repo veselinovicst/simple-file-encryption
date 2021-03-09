@@ -71,6 +71,5 @@ This key should not be stored only in memory and should exist as long as the fil
 4. The current implementation uses file names as identificators, instead it should use file ids.
 5. Exception handling should be improved.
 6. Java documentation and logging should be added.
-7. 
 
 
