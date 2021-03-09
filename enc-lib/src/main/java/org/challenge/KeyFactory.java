@@ -12,6 +12,7 @@ public class KeyFactory {
 
     public static final int AES_KEY_SIZE = 256;
     public static final int IV_SIZE = 16;
+    public static final int GCM_PARAMETER_LEN = 128;
 
     public static SecretKeySpec generateAESKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
@@ -27,7 +28,7 @@ public class KeyFactory {
             InvalidKeyException {
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
-        GCMParameterSpec spec = new GCMParameterSpec(128, iv);
+        GCMParameterSpec spec = new GCMParameterSpec(GCM_PARAMETER_LEN, iv);
         cipher.init(mode, secretKeySpec, spec);
         return cipher;
     }

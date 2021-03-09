@@ -20,44 +20,38 @@ public class ServerThread extends Thread {
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
+            System.out.println("============");
             System.out.println("Connection accepted from " + clientSocket.toString());
             processMessage();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             return;
         }
     }
 
-    private void processMessage() throws IOException {
+    private void processMessage() throws Exception {
         int operationType = dataInputStream.readInt();
         if (operationType == OperationType.UPLOAD_OPERATION.getId()) {
-            System.out.println("Server received valid operation request");
+            System.out.println("Server received valid operation request to upload a file.");
+            sendServerResponse(ServerResponse.SERVER_READY.getId());
+            readFile(processFileName());
+        } else if (operationType == OperationType.DOWNLOAD_OPERATION.getId()) {
+            System.out.println("Server received valid operation request to download a file");
             sendServerResponse(ServerResponse.SERVER_READY.getId());
             writeFile(processFileName());
-        } else if (operationType == OperationType.DOWNLOAD_OPERATION.getId()) {
-            System.out.println("Server received valid operation request");
-            sendServerResponse(ServerResponse.SERVER_READY.getId());
-            sendFile(processFileName());
         } else {
-            System.out.println("Invalid operation");
+            System.out.println("Invalid operation.");
             sendServerResponse(ServerResponse.INVALID_OPERATION.getId());
             clientSocket.close();
         }
     }
 
-    private void sendFile(String fileName) throws IOException {
+    private void writeFile(String fileName) throws Exception {
         File file = new File(directoryPath + File.separator + fileName);
         try {
-            InputStream inputStream = new FileInputStream(file);
-            dataOutputStream.writeLong(file.length());
-
-            int bytes = 0;
-            byte[] buffer = new byte[4096];
-            while ((bytes = inputStream.read(buffer)) != -1){
-                dataOutputStream.write(buffer,0, bytes);
-            }
-            inputStream.close();
-
+            FileInputStream fileInputStream = new FileInputStream(file);
+            sendServerResponse(ServerResponse.FILE_FOUND_SUCCESSFULLY.getId());
+            FileStreamingService.writeFile(dataOutputStream, fileInputStream, file.length());
         } catch (FileNotFoundException e) {
             System.out.println("File does not exist");
             sendServerResponse(ServerResponse.FILE_NOT_FOUND.getId());
@@ -72,17 +66,9 @@ public class ServerThread extends Thread {
         return new String(fileNameBytes);
     }
 
-    private void writeFile(String fileName) throws IOException {
-        long fileSize = dataInputStream.readLong();
+    private void readFile(String fileName) throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(directoryPath + File.separator + fileName);
-        byte[] buffer = new byte[4096];
-
-        int bytes;
-        while (fileSize > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, fileSize))) != -1) {
-            fileOutputStream.write(buffer, 0, bytes);
-            fileSize -= bytes;
-        }
-        fileOutputStream.close();
+        FileStreamingService.readFile(dataInputStream, fileOutputStream);
     }
 
     private void sendServerResponse(int response) throws IOException {

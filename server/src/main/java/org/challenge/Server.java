@@ -30,7 +30,7 @@ public class Server {
             } catch (IOException e) {
                 System.out.println("I/O error: " + e);
             }
-            // start new thread for every client
+            // start new thread for every client connection
             new ServerThread(clientSocket, directoryPath).start();
         }
     }
