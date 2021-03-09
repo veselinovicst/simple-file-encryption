@@ -7,13 +7,14 @@ import java.net.Socket;
 public class Server {
 
     private static final int PORT = 5005;
+    public String directoryPath;
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private static DataOutputStream dataOutputStream = null;
-    private static DataInputStream dataInputStream = null;
 
-    public Server() { }
+    public Server(String directoryPath) {
+        this.directoryPath = directoryPath;
+    }
 
     public void service() {
         System.out.println("Starting server ...");
@@ -30,7 +31,7 @@ public class Server {
                 System.out.println("I/O error: " + e);
             }
             // start new thread for every client
-            new ServerThread(clientSocket).start();
+            new ServerThread(clientSocket, directoryPath).start();
         }
     }
 

@@ -3,7 +3,8 @@ package org.challenge;
 public enum ServerResponse {
 
     SERVER_READY(1),
-    INVALID_OPERATION(2);
+    INVALID_OPERATION(2),
+    FILE_NOT_FOUND(3);
 
     private int id;
 
