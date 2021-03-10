@@ -53,8 +53,14 @@ public class Client {
 
         File file = new File(fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
-        download(fileOutputStream, fileName);
+        boolean fileDownloaded = download(fileOutputStream, fileName);
         fileOutputStream.close();
+
+        if (!fileDownloaded) {
+            System.out.println("File not found.");
+            file.delete();
+            return;
+        }
 
         FileEncryptionService.decrypt(secretKeySpec, new FileInputStream(file), new FileOutputStream(workingDirectoryPath + File.separator + fileName));
         file.delete();
@@ -78,7 +84,7 @@ public class Client {
         closeServerConnection();
     }
 
-    private void download(FileOutputStream fileOutputStream, String fileName) throws IOException {
+    private boolean download(FileOutputStream fileOutputStream, String fileName) throws IOException {
         openServerConnection();
 
         requestOperation(DOWNLOAD_OPERATION);
@@ -86,12 +92,15 @@ public class Client {
             // send file name size and then file name
             dataOutputStream.writeInt(fileName.length());
             dataOutputStream.write(fileName.getBytes());
-            if (isFileFound()) {
-                FileStreamingService.readFile(dataInputStream, fileOutputStream);
+            if (!isFileFound()) {
+                closeServerConnection();
+                return false;
             }
+            FileStreamingService.readFile(dataInputStream, fileOutputStream);
         }
 
         closeServerConnection();
+        return true;
     }
 
     private void openServerConnection() {
