@@ -59,7 +59,16 @@ mvn compile exec:java -Dexec.mainClass="org.challenge.App"
 
 Furthermore, start the client by positioning into cleint directory and run the same command.
 
-On startup of both, the server and the client, you will be prompted to enter absoulute path of working directories, which will later be used as file storage.
+Once the server is started, you will be prompted to enter a working directory of the server. Please enter absoulute path to the existing directoring with not trailing slashes. This diretory will be used as file storage on server side.
+
+The similar situation is with client application. The working directory for the client is a storage where the files downloaded from the server will be stored.
+Furthermore, the client will offer 3 options to the user:
+```
+Choose an operation: 
+ 1 - upload - you will be prompted to enter absolute path of the file that will be uploaded to the server.
+ 2 - download - enter the name of the file that exists on the server.
+ 3 - exit
+```
 
 
 ## Future improvements
@@ -68,8 +77,10 @@ On startup of both, the server and the client, you will be prompted to enter abs
 This key should not be stored only in memory and should exist as long as the files which are encrypted using it exist. 
 2. Similarly, in the real case scenario, the system should not use a file system of a host as a primary storage.
 3. The encryption/decryption key should be unique per file.
-4. The current implementation uses file names as identificators, instead it should use file ids.
-5. Exception handling should be improved.
-6. Java documentation and logging should be added.
+4. The encryption and upload (download and decryption) are currently run as separate operations. In order to achieve best performances these two operations could be merged into one operation, hence once chunk of the file is encrypted it is automatically sent to the server. 
+5. The API offered by the separate library should be synchronized. This is a good spot to use Singleton or Factory design pattern.
+6. The current implementation uses file names as identificators, instead it should use file ids.
+7. Exception handling should be improved.
+8. Java documentation and logging should be added.
 
 
