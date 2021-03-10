@@ -21,9 +21,9 @@ The upload file flow has following steps:
 
 The download file flow consists of the following steps:
 1. The client sends DOWNLOAD_OPERATION request,
-2. The server response with SERVER_READY message,
+2. The server responds with SERVER_READY message,
 3. The client sends file name message,
-4. The server response with FILE_FOUND_SUCCESSFULLY/FILE_NOT_FOUND message,
+4. The server responds with FILE_FOUND_SUCCESSFULLY/FILE_NOT_FOUND message,
 5. The server sends meesage that contains file metadata and file data.
 
    The first 8 bytes of this message are reserved for file size, followed by file content.
@@ -57,9 +57,9 @@ After that, start the server buy positioning into server directory and run comma
 mvn compile exec:java -Dexec.mainClass="org.challenge.App"
 ```
 
-Furthermore, start the client positioning into cleint directory and run same command.
+Furthermore, start the client by positioning into cleint directory and run the same command.
 
-On startup of both, the server and the client, you will be prompted to enter absoulute path of working directories, which will later be used to store the files.
+On startup of both, the server and the client, you will be prompted to enter absoulute path of working directories, which will later be used as file storage.
 
 
 ## Future improvements
