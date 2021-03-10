@@ -34,7 +34,6 @@ public class Client {
         Path filePath = Paths.get(path);
         FileInputStream fileInputStream = new FileInputStream(path);
 
-        // todo check this
         File file = new File(filePath.getFileName().toString());
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         FileEncryptionService.encrypt(secretKeySpec, fileInputStream, fileOutputStream);
@@ -42,7 +41,6 @@ public class Client {
         upload(file);
 
         fileOutputStream.close();
-        // todo check this
         file.delete();
 
         System.out.println("File successfully uploaded.");
@@ -53,15 +51,12 @@ public class Client {
         System.out.println("Enter file name:");
         String fileName = scan.nextLine();
 
-        // todo check this
         File file = new File(fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         download(fileOutputStream, fileName);
         fileOutputStream.close();
 
         FileEncryptionService.decrypt(secretKeySpec, new FileInputStream(file), new FileOutputStream(workingDirectoryPath + File.separator + fileName));
-
-        // todo check this
         file.delete();
 
         System.out.println("File successfully downloaded.");
@@ -88,11 +83,12 @@ public class Client {
 
         requestOperation(DOWNLOAD_OPERATION);
         if (isServerReady()) {
-            // file name size and then file name
+            // send file name size and then file name
             dataOutputStream.writeInt(fileName.length());
             dataOutputStream.write(fileName.getBytes());
-            // todo check whether file exists
-            FileStreamingService.readFile(dataInputStream, fileOutputStream);
+            if (isFileFound()) {
+                FileStreamingService.readFile(dataInputStream, fileOutputStream);
+            }
         }
 
         closeServerConnection();
@@ -119,7 +115,14 @@ public class Client {
 
     private boolean isServerReady() throws IOException {
         int response = dataInputStream.readInt();
+        // SERVER_READY = 1
         return response == 1;
+    }
+
+    private boolean isFileFound() throws IOException {
+        int response = dataInputStream.readInt();
+        // FILE_FOUND_SUCCESSFULLY = 3
+        return response == 3;
     }
 
 }

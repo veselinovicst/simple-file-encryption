@@ -36,7 +36,7 @@ public class ServerThread extends Thread {
             sendServerResponse(ServerResponse.SERVER_READY.getId());
             readFile(processFileName());
         } else if (operationType == OperationType.DOWNLOAD_OPERATION.getId()) {
-            System.out.println("Server received valid operation request to download a file");
+            System.out.println("Server received valid operation request for file download.");
             sendServerResponse(ServerResponse.SERVER_READY.getId());
             writeFile(processFileName());
         } else {

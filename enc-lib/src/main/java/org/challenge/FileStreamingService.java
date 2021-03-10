@@ -22,7 +22,7 @@ public class FileStreamingService {
         long fileSize = dataInputStream.readLong();
         byte[] buffer = new byte[BUFFER_SIZE];
 
-        int bytes;
+        int bytes = 0;
         while (fileSize > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, fileSize))) != -1) {
             fileOutputStream.write(buffer, 0, bytes);
             fileSize -= bytes;

@@ -11,7 +11,7 @@ public class App {
 
     private static String setup() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Enter absolute path of server directory (no trailing slash):");
+        System.out.println("Please enter absolute path of the server directory (no trailing slashes):");
         String path = scan.nextLine();
         System.out.println("The path you entered is: " + path);
         return path;

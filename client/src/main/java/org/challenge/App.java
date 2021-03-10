@@ -17,7 +17,7 @@ public class App {
         SecretKeySpec secretKeySpec = KeyFactory.generateAESKey();
 
         System.out.println("Welcome to the file transfer client.");
-        System.out.println("Please enter absolute path of the client working directory (no trailing slash):");
+        System.out.println("Please enter absolute path of the client working directory (no trailing slashes):");
         String path = scan.nextLine();
         Client client = new Client(path, secretKeySpec);
         while (true) {
